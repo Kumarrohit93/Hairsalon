@@ -1,0 +1,149 @@
+<% layout("/Boilerplates/Admin") %>
+
+<%
+function time(t){
+  if(!t) return "--";
+  return new Date(t).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+}
+%>
+
+<div class="max-w-6xl mx-auto">
+
+  <!-- TITLE -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold text-[#4a3a2f]">Live Queue</h1>
+
+    <form action="/admin/start-next" method="POST">
+      <button class="px-4 py-2 rounded-xl bg-[#c2a27c] text-white font-semibold shadow hover:opacity-90">
+        Start Next
+      </button>
+    </form>
+  </div>
+
+  <!-- ================= SERVING ================= -->
+  <h2 class="text-lg font-semibold mb-3 text-[#4a3a2f]">Currently Serving</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+
+    <% for(let i=1;i<=3;i++){ 
+      let s = serving.find(x => x.workerNumber == i);
+    %>
+
+    <div class="p-4 rounded-2xl shadow bg-white/90 border border-[#eadfce]">
+
+      <div class="flex justify-between items-center mb-2">
+        <p class="text-xs text-[#8b7765]">Worker <%= i %></p>
+        <span class="text-xs px-2 py-1 rounded-full bg-[#f5eee6] text-[#6d5a4c]">
+          <%= s ? "Busy" : "Free" %>
+        </span>
+      </div>
+
+      <% if(s){ %>
+
+        <p class="text-3xl font-bold text-[#4a3a2f]">#<%= s.tokenNumber %></p>
+        <p class="font-medium text-[#4a3a2f]"><%= s.name %></p>
+
+        <p class="text-xs text-[#8b7765] mt-1">
+          <%= s.services && s.services.length ? s.services.map(x=>x.name).join(", ") : "Walk-in" %>
+        </p>
+
+        <p class="text-sm mt-2 text-[#4a3a2f]">
+          Ends at: <%= time(s.estimatedEndTime) %>
+        </p>
+
+        <p class="text-xs mt-1">
+          Payment:
+          <span class="<%= s.paymentStatus === 'paid' ? 'text-green-600':'text-red-600' %>">
+            <%= s.paymentStatus %>
+          </span>
+        </p>
+
+        <div class="mt-4 space-y-2">
+
+          <form action="/admin/complete" method="POST">
+            <input type="hidden" name="id" value="<%= s._id %>">
+            <button class="w-full py-2 rounded-xl bg-green-600 text-white font-semibold">
+              Complete
+            </button>
+          </form>
+
+          <form action="/admin/delay" method="POST">
+            <input type="hidden" name="id" value="<%= s._id %>">
+            <input type="hidden" name="minutes" value="10">
+            <button class="w-full py-2 rounded-xl bg-yellow-100 text-yellow-700 font-semibold">
+              +10 min Delay
+            </button>
+          </form>
+
+        </div>
+
+      <% } else { %>
+
+        <div class="text-center py-10">
+          <p class="text-sm text-[#8b7765]">No customer assigned</p>
+        </div>
+
+      <% } %>
+
+    </div>
+
+    <% } %>
+  </div>
+
+  <!-- ================= WAITING ================= -->
+  <h2 class="text-lg font-semibold mb-3 text-[#4a3a2f]">Waiting Queue</h2>
+
+  <% if(waiting.length === 0){ %>
+    <p class="text-sm text-[#8b7765]">No waiting customers</p>
+  <% } %>
+
+  <div class="space-y-3">
+
+    <% waiting.forEach(c => { %>
+
+      <div class="p-4 bg-white/90 border border-[#eadfce] rounded-2xl shadow">
+
+        <div class="flex justify-between items-center">
+          <p class="font-bold text-[#4a3a2f] text-lg">
+            #<%= c.tokenNumber %> – <%= c.name %>
+          </p>
+          <span class="text-xs text-[#8b7765]">
+            ETA: <%= time(c.estimatedEndTime) %>
+          </span>
+        </div>
+
+        <p class="text-xs text-[#8b7765] mt-1">
+          <%= c.services && c.services.length ? c.services.map(x=>x.name).join(", ") : "Walk-in" %>
+        </p>
+
+      </div>
+
+    <% }) %>
+  </div>
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const modal = document.getElementById("walkinModal");
+  const openBtn = document.getElementById("openWalkinBtn");
+
+  if (!openBtn || !modal) {
+    console.log("Button or modal not found");
+    return;
+  }
+
+  openBtn.addEventListener("click", function () {
+    console.log("OPEN MODAL CLICKED");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+
+  window.closeWalkin = function () {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  };
+
+});
+</script>
+

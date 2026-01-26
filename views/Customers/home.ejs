@@ -1,0 +1,131 @@
+<% layout("/Boilerplates/Customer") %>
+  <section class="px-5 pt-8 pb-10 text-center">
+    <h2 class="text-3xl font-semibold text-[#4a3a2f] leading-tight">
+      Feel like celebrity
+    </h2>
+    <p class="mt-3 text-sm text-[#8b7765]">
+      Book your slot, track your turn, and skip the rush.
+    </p>
+  <% if(setting.isOpen){ %>
+  <a href="/customer/bookPage"
+     class="inline-block mt-6 px-6 py-3 rounded-xl
+            bg-gradient-to-r from-[#d8c1a3] to-[#c2a27c]
+            text-white font-semibold shadow-lg active:scale-[0.97] transition">
+    Book Appointment
+  </a>
+<% } else { %>
+  <div class="mt-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm">
+    🚪 Shop is currently closed.  
+    Please visit again during working hours.
+  </div>
+<% } %>
+
+  </section>
+  <section class="px-5 mb-10">
+  <div class="bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl p-5 shadow">
+
+    <p class="text-xs text-[#8b7765]">Live salon status</p>
+    <h3 class="text-xl font-semibold text-[#4a3a2f] mt-1">Currently Serving</h3>
+
+    <div class="mt-4 flex items-center justify-between">
+
+      <div>
+        <p class="text-3xl font-bold text-[#4a3a2f]">
+          <%= currentlyServingTokens.length ? currentlyServingTokens.join(", ") : "—" %>
+        </p>
+        <p class="text-sm text-[#8b7765]">Token numbers</p>
+      </div>
+
+      <div class="text-right">
+        <p class="text-sm text-[#8b7765]">Next free around</p>
+        <p class="text-lg font-semibold text-[#4a3a2f]">
+          <%= nextFreeTime ? new Date(nextFreeTime).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"}) : "--" %>
+        </p>
+      </div>
+
+    </div>
+
+    <p class="mt-3 text-xs text-[#8b7765]">
+      Waiting: <%= waitingCount %> customers
+    </p>
+
+  </div>
+</section>
+
+
+  <section class="px-5 mb-12">
+    <h3 class="text-lg font-semibold text-[#4a3a2f] mb-4">
+      Popular services
+    </h3>
+
+    <div class="grid grid-cols-2 gap-4">
+<% services.forEach(service => { %>
+<div class="bg-white/80 rounded-2xl p-4 border border-[#eadfce] shadow">
+        <p class="font-medium text-[#4a3a2f]"><%= service.name %></p>
+        <p class="text-xs text-[#8b7765] mt-1">⏱ <%= service.duration %> • ₹<%= service.price %></p>
+      </div>
+<% }) %>
+    </div>
+  </section>
+  <section class="px-5 mb-16">
+    <div class="bg-white/70 border border-[#eadfce] rounded-3xl p-6 shadow">
+
+      <h3 class="text-lg font-semibold text-[#4a3a2f] mb-6">
+        Why customers love us
+      </h3>
+
+      <p class="text-sm text-[#6d5a4c] leading-relaxed">
+  Dev Hair Salon is a modern appointment and live-queue system designed to
+  remove long waiting times and crowd confusion.  
+  Customers can book services online, get a digital token, and track their
+  turn in real-time from their phone.
+
+  <br><br>
+
+  Our system manages multiple workers at once, automatically adjusts waiting
+  time, and keeps the queue transparent so every customer knows exactly
+  when their service will start.
+
+  <br><br>
+
+  Simple for customers. Powerful for the salon. Built to save time.
+</p>
+
+
+    </div>
+  </section>
+<% if(setting.isOpen){ %>
+<div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-[#eadfce] p-4">
+  <a
+    href="/customer/services"
+    class="block w-full text-center py-3 rounded-xl 
+           bg-gradient-to-r from-[#d8c1a3] to-[#c2a27c] 
+           text-white font-semibold shadow-lg active:scale-[0.97] transition">
+    Book Your Slot
+  </a>
+</div>
+<% } else { %>
+<div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-[#eadfce] p-4">
+  <p class="text-center text-sm text-red-700 font-medium">
+    Booking is disabled — shop is closed
+  </p>
+</div>
+<% } %>
+
+    <script>
+  const token = localStorage.getItem("salon_public_token");
+
+if(token){
+  fetch("/status/" + token, { method:"HEAD" })
+    .then(res => {
+      if(res.ok){
+        window.location.href = "/status/" + token;
+      } else {
+        localStorage.removeItem("salon_public_token");
+      }
+    })
+}
+</script>
+
+</body>
+</html>

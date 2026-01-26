@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Salon Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("hidden");
+    }
+  </script>
+</head>
+
+<body class="bg-gradient-to-br from-[#fdf8f3] via-[#f7efe6] to-[#f3eadf] min-h-screen flex">
+
+  <!-- MOBILE SIDEBAR -->
+<div id="mobileMenu" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden">
+
+  <!-- Overlay click to close -->
+  <div onclick="toggleMenu()" class="absolute inset-0"></div>
+
+  <aside class="absolute left-0 top-0 h-full w-72 bg-white/90 backdrop-blur-xl border-r border-[#eadfce] p-6 flex flex-col">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-xl font-semibold text-[#4a3a2f]"><span class="text-yellow-400">काशू</span> Dev salon</h1>
+        <p class="text-xs text-[#9c8a79] capitalize"><%= user.role %> panel</p>
+      </div>
+
+      <!-- Close button -->
+      <button onclick="toggleMenu()" 
+        class="text-2xl font-bold text-[#6d5a4c] hover:text-[#4a3a2f]">
+        ✕
+      </button>
+    </div>
+
+    <nav class="flex flex-col gap-3 text-[#6d5a4c] font-medium">
+
+      <% if (user.role === "superadmin") { %>
+  <a href="/admin/create-admin"
+     class="px-4 py-2 rounded-xl
+     <%= page === 'Create Admin'
+        ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+        : 'hover:bg-[#f5eee6]' %>">
+     Create Admin
+  </a>
+<% } %>
+
+<a href="/admin/livequeue"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Live Queue'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Live Queue
+</a>
+
+<a href="/admin/allcustomers"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Customers'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Customers
+</a>
+
+<a href="/admin/history"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'History'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   History
+</a>
+
+<a href="/admin/addwalkin"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Addwalkin'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Add Walk-in
+</a>
+
+<a href="/admin/servicePage"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Services'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Services
+</a>
+
+<a href="/admin/settings"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Settings'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Settings
+</a>
+
+
+    </nav>
+
+    <div class="mt-auto text-xs text-[#9c8a79]">
+      Logged in as <%= user.username %>
+    </div>
+  </aside>
+</div>
+
+
+  <!-- DESKTOP SIDEBAR -->
+  <aside class="w-72 bg-white/70 backdrop-blur-xl border-r border-[#eadfce] p-6 hidden md:flex flex-col">
+
+    <div class="mb-10">
+      <h1 class="text-2xl font-semibold text-[#4a3a2f]"><span class="text-yellow-400">काशू</span> Dev Salon</h1>
+      <p class="text-xs text-[#9c8a79] capitalize"><%= user ? user.role : "" %> panel</p>
+    </div>
+
+    <nav class="flex flex-col gap-3 text-[#6d5a4c] font-medium">
+
+       <% if (user.role === "superadmin") { %>
+  <a href="/admin/create-admin"
+     class="px-4 py-2 rounded-xl
+     <%= page === 'Create Admin'
+        ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+        : 'hover:bg-[#f5eee6]' %>">
+     Create Admin
+  </a>
+<% } %>
+
+<a href="/admin/livequeue"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Live Queue'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Live Queue
+</a>
+
+<a href="/admin/allcustomers"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Customers'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Customers
+</a>
+
+<a href="/admin/history"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'History'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   History
+</a>
+
+<a href="/admin/addwalkin"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Addwalkin'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Add Walk-in
+</a>
+
+<a href="/admin/servicePage"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Services'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Services
+</a>
+
+<a href="/admin/settings"
+   class="px-4 py-2 rounded-xl
+   <%= page === 'Settings'
+      ? 'bg-[#f5eee6] text-[#4a3a2f] font-semibold'
+      : 'hover:bg-[#f5eee6]' %>">
+   Settings
+</a>
+
+    </nav>
+
+    <div class="mt-auto text-xs text-[#9c8a79]">
+      Logged in as <%= user.username %>
+    </div>
+  </aside>
+
+  <!-- RIGHT SIDE -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- TOPBAR -->
+    <header class="bg-white/70 backdrop-blur-xl border-b border-[#eadfce] px-4 sm:px-6 py-3 flex items-center justify-between">
+
+      <!-- Left -->
+      <div class="flex items-center gap-3">
+        <button onclick="toggleMenu()" class="md:hidden text-2xl text-[#4a3a2f]">☰</button>
+        <!-- <h2 class="text-lg sm:text-xl font-semibold text-[#4a3a2f]">
+          <%= page || "Dashboard" %>
+        </h2> -->
+      </div>
+
+      <!-- Right -->
+      <div class="flex items-center gap-3">
+
+        <div class="text-xs sm:text-sm text-[#6d5a4c] font-medium">
+          <%= user.username %>
+        </div>
+
+        <div class="w-9 h-9 rounded-full bg-[#e8d9c5] flex items-center justify-center font-bold text-[#4a3a2f]">
+          <%= user.username[11].toUpperCase() %>
+        </div>
+        <a href="/admin/logout"
+     class="ml-2 px-3 py-1.5 rounded-lg text-xs sm:text-sm
+            bg-red-100 text-red-700 hover:bg-red-200 transition">
+     Logout
+  </a>
+      </div>
+
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main class="flex-1 p-4 sm:p-6 md:p-10">
+      <%- body %>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-xs text-[#9c8a79] py-3">
+      Built for काशू Dev Salon • Admin System
+    </footer>
+
+  </div>
+
+</body>
+</html>

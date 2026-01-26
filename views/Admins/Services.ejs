@@ -1,0 +1,92 @@
+<% layout("/Boilerplates/Admin") %>
+<% layout("/Boilerplates/Admin") %>
+
+<div class="space-y-8">
+
+  <!-- PAGE HEADER -->
+  <div>
+    <h2 class="text-xl sm:text-2xl font-semibold text-[#4a3a2f]">Salon Services</h2>
+    <p class="text-sm text-[#8b7765]">Manage services, pricing & duration</p>
+  </div>
+
+  <!-- SERVICES LIST -->
+  <section class="bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl p-4 sm:p-6 shadow">
+
+    <h3 class="text-lg font-semibold text-[#4a3a2f] mb-4">All Services</h3>
+
+    <% if (services.length === 0) { %>
+      <p class="text-sm text-[#8b7765]">No services added yet.</p>
+    <% } else { %>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <% services.forEach(service => { %>
+          <div class="border border-[#eadfce] bg-[#faf7f3] rounded-2xl p-4 flex justify-between items-start">
+
+            <div>
+              <p class="font-semibold text-[#4a3a2f]"><%= service.name %></p>
+              <p class="text-xs text-[#8b7765] mt-1">
+                ⏱ <%= service.duration %> min • ₹<%= service.price %>
+              </p>
+            </div>
+
+            <span class="text-xs px-2 py-1 rounded-full 
+              <%= service.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' %>">
+              <%= service.active ? "Active" : "Disabled" %>
+            </span>
+
+          </div>
+        <% }) %>
+
+      </div>
+
+    <% } %>
+
+  </section>
+  <section class="bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl p-4 sm:p-6 shadow max-w-xl">
+
+    <h3 class="text-lg font-semibold text-[#4a3a2f] mb-4">Add New Service</h3>
+
+    <form action="/admin/services/create" method="POST" class="space-y-4">
+
+      <div>
+        <label class="block text-sm font-medium text-[#6d5a4c] mb-1">
+          Service Name
+        </label>
+        <input type="text" name="name" required
+          class="w-full px-4 py-3 rounded-xl border border-[#eadfce] bg-[#faf7f3]
+          focus:ring-2 focus:ring-[#d2b48c] outline-none"
+          placeholder="Haircut">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#6d5a4c] mb-1">
+          Duration (minutes)
+        </label>
+        <input type="number" name="duration" required
+          class="w-full px-4 py-3 rounded-xl border border-[#eadfce] bg-[#faf7f3]
+          focus:ring-2 focus:ring-[#d2b48c] outline-none"
+          placeholder="20">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-[#6d5a4c] mb-1">
+          Price (₹)
+        </label>
+        <input type="number" name="price" required
+          class="w-full px-4 py-3 rounded-xl border border-[#eadfce] bg-[#faf7f3]
+          focus:ring-2 focus:ring-[#d2b48c] outline-none"
+          placeholder="150">
+      </div>
+
+      <button
+        class="w-full py-3 rounded-xl bg-gradient-to-r from-[#d8c1a3] to-[#c2a27c]
+        text-white font-semibold shadow hover:opacity-90 active:scale-[0.97] transition">
+        Create Service
+      </button>
+
+    </form>
+
+  </section>
+
+</div>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invalid Link</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-[#fdf8f3] via-[#f7efe6] to-[#f3eadf] flex items-center justify-center px-4">
+
+  <div class="max-w-md w-full bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl p-8 shadow-xl text-center">
+
+    <!-- Title -->
+    <h1 class="text-2xl font-bold text-[#4a3a2f]">
+      Your Service is complete
+    </h1>
+
+    <!-- Message -->
+    <p class="mt-3 text-sm text-[#8b7765]">
+      Thankyou <%= customer.name %> for visiting us!
+    </p>
+
+    <!-- Button -->
+    <a href="/customer/home"
+       class="inline-block mt-6 px-6 py-3 rounded-xl
+              bg-gradient-to-r from-[#d8c1a3] to-[#c2a27c]
+              text-white font-semibold shadow-lg active:scale-[0.97] transition">
+      Go to Home
+    </a>
+
+  </div>
+
+  <script>
+    localStorage.removeItem("salon_public_token");
+  </script>
+
+</body>
+</html>

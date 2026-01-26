@@ -1,0 +1,30 @@
+<% layout("/Boilerplates/Admin") %>
+
+<div class="flex items-center justify-center">
+  <div
+    class="w-full max-w-xl bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl shadow-xl p-5 sm:p-8"
+  >
+    <!-- Header -->
+    <div class="text-center mb-6 sm:mb-8">
+      <h2 class="text-xl sm:text-2xl font-semibold text-[#4a3a2f]">
+        Edit Customer Payment Status
+      </h2>
+      <p class="text-xs sm:text-sm text-[#8b7765] mt-1">
+        Payment status of Customers
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form action="/admin/customer/<%= customer.publicToken %>/payment" method="POST">
+
+<label>Payment Status</label>
+
+<select name="paymentStatus" required class="w-full px-4 py-2 rounded-xl border">
+  <option value="pending" <%= customer.paymentStatus==="pending"?"selected":"" %>>Pending</option>
+  <option value="paid" <%= customer.paymentStatus==="paid"?"selected":"" %>>Paid</option>
+</select>
+
+<button type="submit">Update</button>
+</form>
+  </div>
+</div>

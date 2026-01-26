@@ -1,0 +1,111 @@
+<% layout("/Boilerplates/Admin") %>
+
+<%
+function time(t){
+  if(!t) return "--";
+  return new Date(t).toLocaleString("en-IN",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"short"});
+}
+%>
+
+<div class="max-w-7xl mx-auto">
+
+  <!-- HEADER -->
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+    <div>
+      <h1 class="text-2xl font-semibold text-[#4a3a2f]">History</h1>
+      <p class="text-sm text-[#8b7765]">Completed & cancelled customers</p>
+    </div>
+
+    <!-- FILTER -->
+    <div class="flex gap-2 flex-wrap">
+      <a href="/admin/history?filter=today" class="px-3 py-1.5 rounded-lg text-sm border <%= filter==='today'?'bg-[#c2a27c] text-white':'bg-white' %>">Today</a>
+      <a href="/admin/history?filter=yesterday" class="px-3 py-1.5 rounded-lg text-sm border <%= filter==='yesterday'?'bg-[#c2a27c] text-white':'bg-white' %>">Yesterday</a>
+      <a href="/admin/history?filter=7days" class="px-3 py-1.5 rounded-lg text-sm border <%= filter==='7days'?'bg-[#c2a27c] text-white':'bg-white' %>">Last 7 days</a>
+      <a href="/admin/history?filter=all" class="px-3 py-1.5 rounded-lg text-sm border <%= filter==='all'?'bg-[#c2a27c] text-white':'bg-white' %>">All</a>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+
+    <div class="p-4 bg-white rounded-2xl shadow border">
+      <p class="text-xs text-[#8b7765]">Customers</p>
+      <p class="text-2xl font-bold"><%= totalCustomers %></p>
+    </div>
+
+    <div class="p-4 bg-white rounded-2xl shadow border">
+      <p class="text-xs text-[#8b7765]">Revenue</p>
+      <p class="text-2xl font-bold text-green-600">₹ <%= totalRevenue %></p>
+    </div>
+
+    <div class="p-4 bg-white rounded-2xl shadow border">
+      <p class="text-xs text-[#8b7765]">Top Service</p>
+      <p class="text-lg font-semibold"><%= topService %></p>
+    </div>
+
+    <div class="p-4 bg-white rounded-2xl shadow border">
+      <p class="text-xs text-[#8b7765]">Filter</p>
+      <p class="text-lg font-semibold capitalize"><%= filter %></p>
+    </div>
+
+  </div>
+
+  <!-- HISTORY LIST -->
+  <div class="space-y-4">
+
+    <% customers.forEach(c => { %>
+
+      <div class="p-4 sm:p-5 bg-white rounded-2xl shadow border">
+
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+
+          <div>
+            <p class="text-lg font-bold">#<%= c.tokenNumber %> • <%= c.name %></p>
+            <p class="text-xs text-[#8b7765]">📞 <%= c.phone %></p>
+          </div>
+
+          <div class="flex gap-2 flex-wrap">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold
+              <%= c.status === "completed" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700" %>">
+              <%= c.status %>
+            </span>
+
+            <span class="px-3 py-1 rounded-full text-xs font-semibold
+              <%= c.paymentStatus === "paid" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700" %>">
+              <%= c.paymentStatus %>
+            </span>
+          </div>
+        </div>
+
+        <!-- SERVICES -->
+        <div class="flex flex-wrap gap-2 mt-3">
+          <% if(c.services && c.services.length){ %>
+            <% c.services.forEach(s => { %>
+              <span class="px-3 py-1 rounded-full text-xs bg-[#f5eee6]">
+                <%= s.name %>
+              </span>
+            <% }) %>
+          <% } else { %>
+            <span class="px-3 py-1 rounded-full text-xs bg-gray-100">Walk-in</span>
+          <% } %>
+        </div>
+
+        <!-- INFO GRID -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 text-sm">
+          <div><span class="text-xs text-[#8b7765]">Amount</span><br>₹ <%= c.totalAmount %></div>
+          <div><span class="text-xs text-[#8b7765]">Time</span><br><%= c.totalEstimatedTime %> min</div>
+          <div><span class="text-xs text-[#8b7765]">Start</span><br><%= time(c.serviceStartTime) %></div>
+          <div><span class="text-xs text-[#8b7765]">End</span><br><%= time(c.serviceEndTime) %></div>
+        </div>
+
+      </div>
+
+    <% }) %>
+
+    <% if(customers.length === 0){ %>
+      <p class="text-sm text-[#8b7765]">No history found for this filter.</p>
+    <% } %>
+
+  </div>
+
+</div>

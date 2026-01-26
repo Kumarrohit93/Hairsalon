@@ -1,0 +1,20 @@
+<% layout("/Boilerplates/Admin") %>
+<h1 class="text-2xl font-semibold mb-6">Shop Settings</h1>
+
+<form method="POST" action="/admin/settings" class="bg-white p-6 rounded-2xl shadow max-w-md space-y-4">
+
+  <div class="flex items-center gap-3">
+    <input type="checkbox" name="isOpen" <%= setting.isOpen ? "checked" : "" %> >
+    <label class="font-medium">Shop is Open</label>
+  </div>
+
+  <div>
+    <label class="text-sm">Closed message</label>
+    <textarea name="closedMessage" class="w-full border rounded-xl p-2 mt-1"><%= setting.closedMessage %></textarea>
+  </div>
+
+  <button class="w-full bg-[#c2a27c] text-white py-2 rounded-xl font-semibold">
+    Update Settings
+  </button>
+
+</form>

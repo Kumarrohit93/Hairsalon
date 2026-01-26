@@ -1,0 +1,86 @@
+<% layout("/Boilerplates/Customer") %>
+<div class="max-w-xl mx-auto px-4 py-6">
+  <h2 class="text-2xl font-semibold text-[#4a3a2f] mb-1">Book your service</h2>
+  <p class="text-sm text-[#8b7765] mb-6">Fill details & select services</p>
+
+  <form
+    action="/customer/book"
+    method="POST"
+    class="bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl p-5 space-y-5 shadow"
+  >
+    
+    <div>
+      <label class="block text-sm font-medium text-[#6d5a4c] mb-1">Name</label>
+      <input
+        name="name"
+        required
+        placeholder="Your name"
+        class="w-full px-4 py-3 rounded-xl border border-[#eadfce] bg-[#faf7f3] focus:ring-2 focus:ring-[#d2b48c] outline-none"
+      />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-[#6d5a4c] mb-1">Phone</label>
+      <input
+        name="phone"
+        required
+        placeholder="Mobile number"
+        class="w-full px-4 py-3 rounded-xl border border-[#eadfce] bg-[#faf7f3] focus:ring-2 focus:ring-[#d2b48c] outline-none"
+      />
+    </div>
+
+    <div>
+      <p class="text-sm font-medium text-[#6d5a4c] mb-2">Select services</p>
+
+      <div id="services" class="space-y-3">
+        <% services.forEach(service => { %>
+  <label
+    class="flex items-center justify-between p-3 rounded-2xl border border-[#eadfce] bg-[#faf7f3]"
+  >
+    <div class="flex items-center gap-3">
+      <input
+        type="checkbox"
+        name="services[]"
+        value="<%= service._id %>"
+        data-price="<%= service.price %>"
+        class="w-5 h-5 accent-[#c2a27c]"
+        onchange="calcTotal()"
+      />
+      <span class="text-[#4a3a2f] font-medium">
+        <%= service.name %>
+      </span>
+    </div>
+
+    <span class="text-sm text-[#8b7765]">
+      ₹<%= service.price %> • ⏱ <%= service.duration %> min
+    </span>
+  </label>
+<% }) %>
+</div>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="flex items-center justify-between border-t pt-4">
+      <p class="text-[#6d5a4c] font-medium">Total</p>
+      <p class="text-xl font-semibold text-[#4a3a2f]">
+        ₹<span id="total">0</span>
+      </p>
+    </div>
+
+    <!-- SUBMIT -->
+    <button
+      class="w-full py-3 rounded-xl bg-gradient-to-r from-[#d8c1a3] to-[#c2a27c] text-white font-semibold shadow"
+    >
+      Continue
+    </button>
+  </form>
+</div>
+
+<script>
+  function calcTotal() {
+    let total = 0;
+    document
+      .querySelectorAll("input[name='services[]']:checked")
+      .forEach((cb) => (total += Number(cb.dataset.price)));
+    document.getElementById("total").innerText = total;
+  }
+</script>

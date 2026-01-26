@@ -1,0 +1,67 @@
+<% layout("/Boilerplates/Admin") %>
+  <div class="bg-white w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-xl relative">
+
+    <h2 class="text-xl font-semibold text-[#4a3a2f] mb-1">Add Walk-in Customer</h2>
+    <p class="text-sm text-[#8b7765] mb-6">Customer came directly to salon</p>
+
+    <form action="/admin/walkin" method="POST" class="space-y-4">
+      <div>
+        <label class="text-sm text-[#6d5a4c]">Customer Name</label>
+        <input required name="name"
+          class="w-full mt-1 px-4 py-2 rounded-xl border bg-[#faf7f3]" />
+      </div>
+
+      <div>
+        <label class="text-sm text-[#6d5a4c]">Phone (optional)</label>
+        <input name="phone"
+          class="w-full mt-1 px-4 py-2 rounded-xl border bg-[#faf7f3]" />
+      </div>
+
+      <div>
+        <p class="text-sm text-[#6d5a4c] mb-2">Select Services</p>
+        <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1">
+
+          <% services.forEach(s => { %>
+            <label class="flex items-center gap-2 p-2 rounded-xl border bg-[#faf7f3]">
+              <input type="checkbox" name="services" value="<%= s._id %>">
+              <span class="text-sm"><%= s.name %> (₹<%= s.price %>)</span>
+            </label>
+          <% }) %>
+
+        </div>
+      </div>
+
+      <div>
+  <p class="text-sm text-[#6d5a4c] mb-2">Payment Method</p>
+
+  <div class="grid grid-cols-2 gap-3">
+    <label class="flex items-center gap-2 p-3 rounded-xl border bg-[#faf7f3] cursor-pointer">
+      <input type="radio" name="paymentMethod" value="cash" required>
+      <span class="text-sm font-medium">Cash</span>
+    </label>
+
+    <label class="flex items-center gap-2 p-3 rounded-xl border bg-[#faf7f3] cursor-pointer">
+      <input type="radio" name="paymentMethod" value="upi">
+      <span class="text-sm font-medium">UPI</span>
+    </label>
+
+    <label class="flex items-center gap-2 p-3 rounded-xl border bg-[#faf7f3] cursor-pointer">
+      <input type="radio" name="paymentMethod" value="card">
+      <span class="text-sm font-medium">Card</span>
+    </label>
+
+    <label class="flex items-center gap-2 p-3 rounded-xl border bg-[#faf7f3] cursor-pointer">
+      <input type="radio" name="paymentMethod" value="pending">
+      <span class="text-sm font-medium">Pay later</span>
+    </label>
+  </div>
+</div>
+
+      <button
+        class="w-full mt-4 py-3 rounded-xl bg-[#c2a27c] text-white font-semibold">
+        Add to Queue
+      </button>
+
+    </form>
+  </div>
+

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Payment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-[#fdf8f3] via-[#f7efe6] to-[#f3eadf] min-h-screen">
+
+  <!-- TOP BAR -->
+  <header class="sticky top-0 bg-white/70 backdrop-blur-xl border-b border-[#eadfce] px-4 py-3 text-center">
+    <h1 class="font-semibold text-[#4a3a2f]">Dev Hair Salon</h1>
+    <p class="text-xs text-[#8b7765]">Secure Payment</p>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-md mx-auto px-4 py-6 space-y-6">
+
+    <!-- BOOKING SUMMARY -->
+    <section class="bg-white/80 backdrop-blur-xl border border-[#eadfce] rounded-3xl p-5 shadow">
+
+      <p class="text-xs text-[#8b7765]">Booking for</p>
+      <h2 class="text-xl font-semibold text-[#4a3a2f]"><%= customer.name %></h2>
+      <p class="text-xs text-[#8b7765] mt-1">📞 <%= customer.phone %></p>
+
+      <div class="mt-4 space-y-2 text-sm text-[#6d5a4c]">
+        <% customer.services.forEach(s => { %>
+          <div class="flex justify-between">
+            <span><%= s.name %></span>
+            <span>₹<%= s.price %></span>
+          </div>
+        <% }) %>
+      </div>
+
+      <div class="border-t mt-3 pt-3 flex justify-between font-semibold text-[#4a3a2f]">
+        <span>Total</span>
+        <span>₹<%= customer.totalAmount %></span>
+      </div>
+
+    </section>
+
+    <!-- INFO -->
+    <section class="bg-white/70 border border-[#eadfce] rounded-2xl p-4 text-center text-xs text-[#8b7765]">
+      🔒 100% secure payment • UPI • Cards • Netbanking
+    </section>
+
+  </main>
+
+  <!-- PAY BUTTON FIXED -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-[#eadfce] p-4">
+    <button
+      type="button"
+      onclick="payNow()"
+      class="w-full py-3.5 rounded-xl
+             bg-gradient-to-r from-[#d8c1a3] to-[#c2a27c]
+             text-white text-lg font-semibold shadow-lg
+             active:scale-[0.97] transition">
+      Pay ₹<%= customer.totalAmount %>
+    </button>
+  </div>
+
+<script>
+async function payNow(){
+  console.log("Pay clicked");
+
+  try {
+    const res = await fetch("/payment/create-order", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ customerId:"<%= customer._id %>" })
+    });
+
+    const order = await res.json();
+    console.log("Order:", order);
+
+    const options = {
+      key: "<%= process.env.RAZORPAY_KEY_ID %>",
+      amount: order.amount,
+      currency: "INR",
+      name: "Dev Hair Salon",
+      description: "Service Booking",
+      order_id: order.id,
+
+      handler: function (response){
+        fetch("/payment/verify",{
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            customerId: "<%= customer._id %>"
+          })
+        }).then(()=> {
+          window.location.href="/status/<%= customer.publicToken %>";
+        });
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch(err){
+    console.error("PAY ERROR:", err);
+    alert("Something went wrong. Try again.");
+  }
+}
+</script>
+
+</body>
+</html>
