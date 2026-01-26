@@ -30,7 +30,7 @@ const homePage = async (req, res) => {
 
 const bookingPage = async (req, res) => {
   const services = await Service.find({ active: true });
-  res.render("Customers/book", { services });
+  res.render("Customers/Book", { services });
 };
 
 const createBooking = async (req, res) => {
