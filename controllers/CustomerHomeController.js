@@ -88,7 +88,7 @@ const createBooking = async (req, res) => {
     });
     await recalcQueue()
 
-    res.render("Customers/pay", { customer, razorpayKey: process.env.RAZORPAY_KEY_ID });
+    res.render(`/status/${customer.publicToken}`, { customer, razorpayKey: process.env.RAZORPAY_KEY_ID });
   } catch (err) {
     console.error("BOOKING ERROR:", err);
     res.status(500).send("Something went wrong");
