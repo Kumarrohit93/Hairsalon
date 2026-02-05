@@ -33,7 +33,7 @@ const updatePaymentStatus = async (req, res) => {
 }
 
 const deleteCustomer = async(req, res) => {
-  await customerModel.findByIdAndDelete({_id: req.params.id})
+  await customerModel.findByIdAndDelete({publicToken: req.params.id})
   res.redirect("/admin/allCustomers")
 }
 
