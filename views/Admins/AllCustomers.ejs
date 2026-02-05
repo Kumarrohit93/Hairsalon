@@ -65,7 +65,7 @@ function time(t){
           </div>
 
           <div class="flex gap-2 flex-wrap">
-            <form action="/admin/customer/<%= c.publicToken %>/delete" method="delete"<button class="px-6 py-1 rounded-full text-md border border-gray-200 font-semibold">Delete Customer</button></a>
+            <form action="/admin/customer/<%= c.publicToken %>/delete" method="delete"<button class="px-6 py-1 rounded-full text-md border border-gray-200 font-semibold">Delete Customer</button></form>
             <a href="/admin/customer/<%= c.publicToken %>/edit"><button class="px-6 py-1 rounded-full text-md border border-gray-200 font-semibold">Edit Payment Status</button></a>
             <span class="px-3 py-1 rounded-full text-xs font-semibold text-center
               <%= c.status === "waiting" ? "bg-yellow-100 text-yellow-700" :
