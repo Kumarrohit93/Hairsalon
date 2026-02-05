@@ -32,4 +32,9 @@ const updatePaymentStatus = async (req, res) => {
   res.redirect("/admin/allCustomers")
 }
 
-module.exports = { editPage, updatePaymentStatus }
+const deleteCustomer = async(req, res) => {
+  await customerModel.findByIdAndDelete({_id: req.params.id})
+  res.redirect("/admin/allCustomers")
+}
+
+module.exports = { editPage, updatePaymentStatus, deleteCustomer }
